@@ -26,11 +26,13 @@ Clonar o repositório
 git clone git@github.com:robsonpedroso/x.git
 ```
 
-Rodar o comando `vagrant up` para subir o server com o RabbitMQ instalado
+Rodar o comando `vagrant up` para subir o server com o RabbitMQ instalado e o Redis no docker
  - IP do servidor `192.168.33.10`
 	- Porta do dashboard: 15672
  - Usuário: `admin`
  - Senha: `123`
+
+ - Redis `192.168.33.10:6379`
 
 
 Abra a solução com o seu IDE (no meu caso Visual Studio) e compile.
@@ -55,6 +57,15 @@ Se ele retornar ok (conforme exemplo abaixo)
     "messages": []
 }
 ```
+
+As informações de configuração se encontram numa classe chamada `Settings` no `Domain`.
+
+A princípio ela esta com os dados fixos, num próximo momento será colocado no `appsettings.json`
+
+## Worker
+
+O projeto `Worker` serve para ler as filas do RabbitMQ e salvar em banco e atualizar o cache conforme demanda.
+
 ## Diretórios
 
 1. `_docs` - Contem o arquivo Readme.md e caso necessário outras documentações para suporte a execução e manutenção da aplicação.
@@ -62,6 +73,12 @@ Se ele retornar ok (conforme exemplo abaixo)
 3. `core` - Estrutura padrão do DDD contendo os projetos `Application`, `Domain` e `Infra`
 4. `tools` - Ferramentas para ajudar no desenvolvimento, no caso foi usado algumas extensions para facilitar a implementação da API e dos retornos.
 5. `worker` - Worker para processar as filas
+
+## Diagrama
+
+Segue o diagrama do funcionamento.
+
+![Diagrama](https://github.com/robsonpedroso/lab-cqrs-rabbitmq/blob/master/diagrama.png)
 
 ### Padrão de Tecnologia utilizado
 
@@ -108,17 +125,28 @@ PATCH version when you make backwards compatible bug fixes.
 Additional labels for pre-release and build metadata are available as extensions to the MAJOR.MINOR.PATCH format.
 ```
 
-## Autores
+### Autores
 
 * **Robson Pedroso** - *Projeto inicial* - [RobsonPedroso](https://github.com/robsonpedroso)
 
-## Licença
+### Licença
 
 [MIT](https://gist.github.com/robsonpedroso/98dc906d5896711f07a9cffbcc2776ea)
 
-## Ferramentas
+### Redis Web
+
+Utilizando o `Redis Commander` para visualizar o cache.
+
+```
+npm install -g redis-commander
+redis-commander --redis-host=192.168.33.10 --redis-port=6379
+```
+
+### Ferramentas
 
 * [RabbitMQ](https://www.rabbitmq.com/getstarted.html)
 * [Vagrant](https://www.vagrantup.com/)
 * [Dotnet](https://dotnet.microsoft.com/download)
 * [VirtualBox](https://www.virtualbox.org/)
+* [Redis](https://redis.io)
+* [Redis Commander](https://github.com/joeferner/redis-commander)

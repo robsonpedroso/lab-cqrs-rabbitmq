@@ -15,7 +15,12 @@ namespace CQRS
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration) => Configuration = configuration;
+        Settings settings;
+        public Startup(IConfiguration configuration)
+        {
+            Configuration = configuration;
+            this.settings = new Settings();
+        }
 
         public IConfiguration Configuration { get; }
 
@@ -30,14 +35,18 @@ namespace CQRS
             services.AddMessageNotifier(Configuration);
 
             services.AddServiceMappingsFromAssemblies<BaseApplication, IBaseService, AccountRepository>();
+            
+            services.AddDistributedRedisCache(options =>
+            {
+                options.Configuration = settings.RedisConfig.HostName;
+                options.InstanceName = settings.RedisConfig.InstanceName;
+            });
 
             ConnectionRabbitMQ(services);
         }
 
         public void ConnectionRabbitMQ(IServiceCollection services)
         {
-            Settings settings = new Settings();
-
             var factory = new ConnectionFactory()
             {
                 HostName = settings.RabbitConfig.HostName,

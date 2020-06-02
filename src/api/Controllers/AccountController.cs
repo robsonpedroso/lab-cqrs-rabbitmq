@@ -1,6 +1,5 @@
 ﻿using CQRS.Core.Application;
 using CQRS.Core.Domain.DTO;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Threading.Tasks;
@@ -16,17 +15,17 @@ namespace CQRS.Controllers
             => this.accountApplication = accountApplication;
 
         [HttpPost, Route("")]
-        public IActionResult Save(Account account)
+        public async Task<IActionResult> Save(Account account)
         {
-            var result = accountApplication.Save(account);
+            var result = await accountApplication.Save(account);
 
             return Ok(result.Id);
         }
 
         [HttpGet, Route("{id}")]
-        public IActionResult Get(Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
-            var result = accountApplication.Get(id);
+            var result = await accountApplication.Get(id);
             return Ok(result);
         }
 

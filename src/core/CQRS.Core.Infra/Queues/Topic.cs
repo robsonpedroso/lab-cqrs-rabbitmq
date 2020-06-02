@@ -1,8 +1,5 @@
 ﻿using RabbitMQ.Client;
-using System;
-using System.Collections.Generic;
 using System.Text;
-using System.Text.Json;
 
 namespace CQRS.Core.Infra.Queues
 {
@@ -22,6 +19,10 @@ namespace CQRS.Core.Infra.Queues
         public static void SendQueue(IModel channel, IBasicProperties properties, string exchange, string queueName, string jsonBody)
         {
             byte[] content = Encoding.Default.GetBytes(jsonBody);
+            channel.ExchangeDeclare(exchange, ExchangeType.Topic);
+            channel.QueueDeclare(queueName, true, false, false, null);
+            channel.QueueBind(queueName, exchange, queueName, null);
+
             channel.BasicPublish(exchange: exchange, routingKey: queueName, basicProperties: properties, body: content);
         }
     }

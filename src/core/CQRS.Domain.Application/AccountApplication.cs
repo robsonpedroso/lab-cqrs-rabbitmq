@@ -2,8 +2,6 @@
 using CQRS.Core.Domain.Contracts.Services;
 using CQRS.Tools.Utils.Extensions;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using DO = CQRS.Core.Domain.Entities;
 using DTO = CQRS.Core.Domain.DTO;
@@ -20,7 +18,7 @@ namespace CQRS.Core.Application
             this.accountService = accountService;
         }
 
-        public DTO.Account Save(DTO.Account account)
+        public async Task<DTO.Account> Save(DTO.Account account)
         {
             account.Valid();
             var entity = new DO.Account(account);
@@ -29,14 +27,14 @@ namespace CQRS.Core.Application
             return new DTO.Account(entity);
         }
 
-        public Task Get(Guid id)
+        public async Task<DTO.Account> Get(Guid id)
         {
-            var result = accountRepository.Get(id);
+            var result = await accountRepository.Get(id);
 
             if (result.IsNull())
                 throw new ArgumentException($"Usuário {id} não encontrada.");
 
-            return result;
+            return new DTO.Account(result);
         }
 
         public async void Delete(Guid id)

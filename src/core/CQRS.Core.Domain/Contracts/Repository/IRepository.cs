@@ -9,7 +9,7 @@ namespace CQRS.Core.Domain.Contracts.Repository
     {
         void Delete(TEntity entity);
         void Delete(Guid id);
-        Task Get(Guid id);
+        Task<TEntity> Get(Guid id);
         void Save(TEntity entity);
         void Update(TEntity entity);
     }

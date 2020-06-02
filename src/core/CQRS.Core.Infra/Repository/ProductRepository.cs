@@ -19,7 +19,7 @@ namespace CQRS.Core.Infra.Repository
             throw new NotImplementedException();
         }
 
-        public Task Get(Guid id)
+        public async Task<Product> Get(Guid id)
         {
             throw new NotImplementedException();
         }
