@@ -80,6 +80,17 @@ Segue o diagrama do funcionamento.
 
 ![Diagrama](https://github.com/robsonpedroso/lab-cqrs-rabbitmq/blob/master/diagrama.png)
 
+
+## Regra
+
+Meu modelo é para melhorar o gargalo que temos no banco de dados, tanto na gravação quanto na leitura.
+
+Com esse modelo conseguimos fazer com que a leitura e gravação sejam persistidas no banco.
+
+Porém se o banco estiver sobrecarregado não afetará a aplicação, pois o Worker gravará em cache e no banco assincronamente, fazendo com que o cliente consiga fazer um request sem ficar preso pois o mesmo será recuperado do cache e o banco fará a gravação no seu tempo.
+Com isso desafogamos a escrita e leitura do banco.
+
+
 ### Padrão de Tecnologia utilizado
 
 Utilizamos o padrão do DDD mais simplificado para trabalhar com os projetos.
